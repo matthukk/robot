@@ -80,13 +80,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
    // m_robotDrive.arcadeDrive(-m_controller.getLeftY(), -m_controller.getRightX());
-  double output = m_controller.getLeftY();
-      m_leftDrive1.set(output);
-      m_leftDrive2.set(output);
-      m_rightDrive1.set(output);
-      m_rightDrive2.set(output);
-      System.out.println(output);
-    
+  double outputY = m_controller.getLeftY();
+  double outputX = m_controller.getRightX();
+      m_leftDrive1.set(outputY);
+      m_leftDrive2.set(outputY);
+      m_rightDrive1.set(outputY);
+      m_rightDrive2.set(outputY);
+      System.out.println(outputY);
+  
   }
 
   /** This function is called once each time the robot enters test mode. */
