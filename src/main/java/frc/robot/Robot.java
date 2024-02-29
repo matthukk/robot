@@ -26,8 +26,11 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 public class Robot extends TimedRobot {
   private final CANSparkMax m_leftDrive1 = new CANSparkMax(1, MotorType.kBrushed);
   private final CANSparkMax m_leftDrive2 = new CANSparkMax(2, MotorType.kBrushed);
-  private final CANSparkMax m_rightDrive1 = new CANSparkMax(3, MotorType.kBrushed);
-  private final CANSparkMax m_rightDrive2 = new CANSparkMax(4, MotorType.kBrushed);
+  private final CANSparkMax m_rightDrive1 = new CANSparkMax(4, MotorType.kBrushed);
+  private final CANSparkMax m_rightDrive2 = new CANSparkMax(3, MotorType.kBrushed);
+  private final CANSparkMax m_shooter1 = new CANSparkMax(5, MotorType.kBrushed);
+  private final CANSparkMax m_shooter2 = new CANSparkMax(6, MotorType.kBrushed);
+  private final DifferentialDrive drive = new DifferentialDrive(m_leftDrive1, m_rightDrive1);
   // private final VictorSPX m_test = new VictorSPX(3);
   // private final DifferentialDrive m_robotDrive =
   //     new DifferentialDrive(m_leftDrive::set, m_rightDrive::set);
@@ -50,8 +53,11 @@ public class Robot extends TimedRobot {
     // gearbox is constructed, you might have to invert the left side instead.
     m_rightDrive1.setInverted(true);
     m_rightDrive2.setInverted(true);
-    m_leftDrive1.setInverted(true);
-    m_leftDrive2.setInverted(true);
+    // m_leftDrive1.setInverted(true);
+    // m_leftDrive2.setInverted(true);
+    m_rightDrive2.follow(m_rightDrive1);
+    m_leftDrive2.follow(m_leftDrive1);
+    m_shooter2.follow(m_shooter1);
   }
 
   /** This function is run once each time the robot enters autonomous mode. */
@@ -66,9 +72,9 @@ public class Robot extends TimedRobot {
     // Drive for 2 seconds
     if (m_timer.get() < 2.0) {
       // Drive forwards half speed, make sure to turn input squaring off
-      // m_robotDrive.arcadeDrive(0.5, 0.0, false);
+      drive.arcadeDrive(0.5, 0.0, false);
     } else {
-      // m_robotDrive.stopMotor(); // stop robot
+      drive.stopMotor(); // stop robot
     }
   }
 
@@ -80,16 +86,27 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
    // m_robotDrive.arcadeDrive(-m_controller.getLeftY(), -m_controller.getRightX());
-  double outputY = m_controller.getLeftY();
-  double outputX = m_controller.getRightX();
-      m_leftDrive1.set(outputY);
-      m_leftDrive2.set(outputY);
-      m_rightDrive1.set(outputY);
-      m_rightDrive2.set(outputY);
-      System.out.println(outputY);
-  
+  /**double outputY = m_controller.getLeftY();
+    * double outputX = m_controller.getRightX();
+    *  m_leftDrive1.set(outputY);
+    *  m_leftDrive2.set(outputY);
+    *  m_rightDrive1.set(outputY);
+    *  m_rightDrive2.set(outputY);
+    *  System.out.println(outputY);
+    */
+  drive.arcadeDrive(m_controller.getRawAxis(1), m_controller.getRawAxis(4));
+  if(m_controller.getRawButton(1)==true){
+    m_shooter1.set(0.2);
+  }
+  else if(m_controller.getRawButton(2)==true){
+    m_shooter1.set(-1);
+  }
+  else{
+    m_shooter1.set(0);
   }
 
+  }
+  
   /** This function is called once each time the robot enters test mode. */
   @Override
   public void testInit() {}
