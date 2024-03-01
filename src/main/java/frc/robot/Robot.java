@@ -6,7 +6,7 @@ package frc.robot;
 
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 
 import edu.wpi.first.util.sendable.SendableRegistry;
@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+// import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax; // unneeded
 
 
 /**
@@ -53,8 +53,6 @@ public class Robot extends TimedRobot {
     // gearbox is constructed, you might have to invert the left side instead.
     m_rightDrive1.setInverted(true);
     m_rightDrive2.setInverted(true);
-    // m_leftDrive1.setInverted(true);
-    // m_leftDrive2.setInverted(true);
     m_rightDrive2.follow(m_rightDrive1);
     m_leftDrive2.follow(m_leftDrive1);
     m_shooter2.follow(m_shooter1);
