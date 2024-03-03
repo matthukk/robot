@@ -53,6 +53,8 @@ public class Robot extends TimedRobot {
     // gearbox is constructed, you might have to invert the left side instead.
     m_rightDrive1.setInverted(true);
     m_rightDrive2.setInverted(true);
+
+    // Link motor pairs
     m_rightDrive2.follow(m_rightDrive1);
     m_leftDrive2.follow(m_leftDrive1);
     m_shooter2.follow(m_shooter1);
@@ -70,7 +72,7 @@ public class Robot extends TimedRobot {
     // Drive for 2 seconds
     if (m_timer.get() < 2.0) {
       // Drive forwards half speed, make sure to turn input squaring off
-      drive.arcadeDrive(0.5, 0.0, false);
+      drive.arcadeDrive(-0.5, 0.0, false);
     } else {
       drive.stopMotor(); // stop robot
     }
@@ -83,21 +85,18 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during teleoperated mode. */
   @Override
   public void teleopPeriodic() {
-   // m_robotDrive.arcadeDrive(-m_controller.getLeftY(), -m_controller.getRightX());
-  /**double outputY = m_controller.getLeftY();
-    * double outputX = m_controller.getRightX();
-    *  m_leftDrive1.set(outputY);
-    *  m_leftDrive2.set(outputY);
-    *  m_rightDrive1.set(outputY);
-    *  m_rightDrive2.set(outputY);
-    *  System.out.println(outputY);
-    */
+
   drive.arcadeDrive(m_controller.getRawAxis(1), m_controller.getRawAxis(4));
+  
+
   if(m_controller.getRawButton(1)==true){
-    m_shooter1.set(0.2);
+    m_shooter1.set(0.7);
   }
   else if(m_controller.getRawButton(2)==true){
     m_shooter1.set(-1);
+  }
+  else if(m_controller.getRawButton(2)==true && m_controller.getRawButton(2)==true){
+    m_shooter1.set(0);
   }
   else{
     m_shooter1.set(0);
