@@ -73,12 +73,12 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // Drive for 2 seconds
-    /*if (m_timer.get() < 2.0) {
+    if (m_timer.get() < 2.0) {
       // Drive forwards half speed, make sure to turn input squaring off
       drive.arcadeDrive(-0.5, 0.0, false);
     } else {
       drive.stopMotor(); // stop robot
-    }*/
+    }
   }
 
   /** This function is called once each time the robot enters teleoperated mode. */
