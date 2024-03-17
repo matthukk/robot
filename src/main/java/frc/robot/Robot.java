@@ -5,9 +5,10 @@
 package frc.robot;
 
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 // import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax; // unneeded
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 /**
@@ -28,8 +30,8 @@ public class Robot extends TimedRobot {
   private final CANSparkMax m_leftDrive2 = new CANSparkMax(2, MotorType.kBrushed);
   private final CANSparkMax m_rightDrive1 = new CANSparkMax(4, MotorType.kBrushed);
   private final CANSparkMax m_rightDrive2 = new CANSparkMax(3, MotorType.kBrushed);
-  private final CANSparkMax m_shooter1 = new CANSparkMax(5, MotorType.kBrushed);
-  private final CANSparkMax m_shooter2 = new CANSparkMax(6, MotorType.kBrushed);
+  private final PWMSparkMax m_shooter1 = new PWMSparkMax(1);
+  private final PWMSparkMax m_shooter2 = new PWMSparkMax(0);
   private final DifferentialDrive drive = new DifferentialDrive(m_leftDrive1, m_rightDrive1);
   // private final VictorSPX m_test = new VictorSPX(3);
   // private final DifferentialDrive m_robotDrive =
@@ -57,30 +59,34 @@ public class Robot extends TimedRobot {
     // Link motor pairs
     m_rightDrive2.follow(m_rightDrive1);
     m_leftDrive2.follow(m_leftDrive1);
-    m_shooter2.follow(m_shooter1);
+    
   }
 
   /** This function is run once each time the robot enters autonomous mode. */
   @Override
   public void autonomousInit() {
     m_timer.restart();
+    
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
     // Drive for 2 seconds
-    if (m_timer.get() < 2.0) {
+    /*if (m_timer.get() < 2.0) {
       // Drive forwards half speed, make sure to turn input squaring off
       drive.arcadeDrive(-0.5, 0.0, false);
     } else {
       drive.stopMotor(); // stop robot
-    }
+    }*/
   }
 
   /** This function is called once each time the robot enters teleoperated mode. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    m_shooter1.set(0);
+    m_shooter2.set(0);
+  }
 
   /** This function is called periodically during teleoperated mode. */
   @Override
@@ -89,19 +95,22 @@ public class Robot extends TimedRobot {
   drive.arcadeDrive(m_controller.getRawAxis(1), m_controller.getRawAxis(4));
   
 
-  if(m_controller.getRawButton(1)==true){
+  if(m_controller.getAButton()){
     m_shooter1.set(0.7);
   }
-  else if(m_controller.getRawButton(2)==true){
+  if(m_controller.getBButton()){
+     m_shooter2.set(0.7);
+  }
+  if(m_controller.getYButton()){
     m_shooter1.set(-1);
   }
-  else if(m_controller.getRawButton(2)==true && m_controller.getRawButton(2)==true){
-    m_shooter1.set(0);
+  if(m_controller.getXButton()){
+    m_shooter2.set(-1);
   }
   else{
     m_shooter1.set(0);
+    m_shooter2.set(0);
   }
-
   }
   
   /** This function is called once each time the robot enters test mode. */
